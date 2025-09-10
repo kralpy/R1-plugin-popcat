@@ -10,13 +10,12 @@
       padding: 0;
       width: 240px;
       height: 282px;
-      background: #f0dbdb
+      background: #f0dbdb; /* nieuwe achtergrond */
       display: flex;
       justify-content: center;
       align-items: center;
       overflow: hidden;
       font-family: sans-serif;
-      color: #fff;
     }
     #app {
       display: flex;
@@ -24,16 +23,17 @@
       align-items: center;
     }
     #popcat {
-      width: 140px;   /* nog kleiner */
+      width: 140px;   /* kleinere png */
       height: auto;
       cursor: pointer;
-      outline: none;  /* geen selectie rand */
-      user-select: none; /* geen highlight bij click */
+      outline: none;
+      user-select: none;
     }
     #counter {
       margin-top: 8px;
       font-size: 16px;
       font-weight: bold;
+      color: brown; /* counter tekstkleur */
     }
   </style>
 </head>
@@ -49,16 +49,14 @@
     const popcat = document.getElementById("popcat");
     const counter = document.getElementById("counter");
 
-    // Realistischer "pop" geluid (fles effect)
     function playPopSound() {
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
 
-      // Ruis burst
-      const bufferSize = ctx.sampleRate * 0.2; // 0.2 sec
+      const bufferSize = ctx.sampleRate * 0.2;
       const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
       const data = buffer.getChannelData(0);
       for (let i = 0; i < bufferSize; i++) {
-        data[i] = (Math.random() * 2 - 1) * Math.exp(-i / 400); // snel wegstervend
+        data[i] = (Math.random() * 2 - 1) * Math.exp(-i / 400);
       }
       const noise = ctx.createBufferSource();
       noise.buffer = buffer;

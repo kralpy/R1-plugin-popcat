@@ -24,7 +24,7 @@
       align-items: center;
     }
     #popcat {
-      width: 200px;
+      width: 160px;   /* kleiner */
       height: auto;
       cursor: pointer;
     }
@@ -47,24 +47,24 @@
     const popcat = document.getElementById("popcat");
     const counter = document.getElementById("counter");
 
-    // Pop geluid via Web Audio API
+    // Betere pop sound (lage plop toon)
     function playPopSound() {
       const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       const osc = audioCtx.createOscillator();
       const gainNode = audioCtx.createGain();
 
-      osc.type = "square"; // scherpe toon
-      osc.frequency.setValueAtTime(800, audioCtx.currentTime); // startfrequentie
-      osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.1);
+      osc.type = "sine"; // zachte pop toon
+      osc.frequency.setValueAtTime(200, audioCtx.currentTime); // lage frequentie
+      osc.frequency.exponentialRampToValueAtTime(50, audioCtx.currentTime + 0.08);
 
-      gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+      gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
 
       osc.connect(gainNode);
       gainNode.connect(audioCtx.destination);
 
       osc.start();
-      osc.stop(audioCtx.currentTime + 0.1);
+      osc.stop(audioCtx.currentTime + 0.08);
     }
 
     function doPop() {
@@ -81,10 +81,11 @@
     // PTT knop op de R1
     window.addEventListener("sideClick", doPop);
 
-    // Voor PC test: druk Enter
+    // Voor PC test: Enter toets
     document.addEventListener("keydown", (e) => {
       if (e.key === "Enter") doPop();
     });
   </script>
 </body>
 </html>
+

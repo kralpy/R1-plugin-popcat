@@ -10,7 +10,7 @@
       padding: 0;
       width: 240px;
       height: 282px;
-      background: #f0dbdb; /* nieuwe achtergrond */
+      background-color: #f0dbdb !important; /* geforceerde kleur */
       display: flex;
       justify-content: center;
       align-items: center;
@@ -21,19 +21,21 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
+      height: 100%;
     }
     #popcat {
-      width: 140px;   /* kleinere png */
+      width: 130px;   /* iets kleiner */
       height: auto;
       cursor: pointer;
       outline: none;
       user-select: none;
     }
     #counter {
-      margin-top: 8px;
-      font-size: 16px;
+      margin-top: 12px;
+      font-size: 18px;
       font-weight: bold;
-      color: brown; /* counter tekstkleur */
+      color: brown; /* teller kleur */
     }
   </style>
 </head>
@@ -51,19 +53,18 @@
 
     function playPopSound() {
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
-
-      const bufferSize = ctx.sampleRate * 0.2;
+      const bufferSize = ctx.sampleRate * 0.15;
       const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
       const data = buffer.getChannelData(0);
       for (let i = 0; i < bufferSize; i++) {
-        data[i] = (Math.random() * 2 - 1) * Math.exp(-i / 400);
+        data[i] = (Math.random() * 2 - 1) * Math.exp(-i / 300);
       }
       const noise = ctx.createBufferSource();
       noise.buffer = buffer;
 
       const gainNode = ctx.createGain();
-      gainNode.gain.setValueAtTime(0.7, ctx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+      gainNode.gain.setValueAtTime(0.8, ctx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
 
       noise.connect(gainNode).connect(ctx.destination);
       noise.start();

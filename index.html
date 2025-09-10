@@ -12,18 +12,24 @@
       height: 282px;
       overflow: hidden;
       font-family: sans-serif;
-      background: black; /* fallback zwart */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: transparent; /* voor afronden zichtbaar */
     }
     #app {
       width: 240px;
       height: 282px;
-      background-color: #f0dbdb; /* achtergrond kleur */
+      background-color: #f0dbdb;
+      border-radius: 20px; /* afgeronde hoeken */
       display: flex;
       flex-direction: column;
       justify-content: flex-end; 
       align-items: center;
-      padding-bottom: 35px; /* kat meer omhoog */
+      padding-bottom: 20px;
       position: relative;
+      box-sizing: border-box;
+      overflow: hidden;
     }
     #popcat {
       width: 130px;
@@ -32,18 +38,23 @@
       outline: none;
       user-select: none;
       position: relative;
-      top: -55px; /* kat duidelijk omhoog */
+      top: -55px; 
       z-index: 1;
     }
     #counter {
       position: absolute;
-      top: 50px; /* teller duidelijk naar beneden */
+      top: 50px; 
       font-size: 18px;
       font-weight: bold;
       color: brown;
       z-index: 2;
       text-align: center;
-      width: 100%;
+      width: 50px;
+      height: 50px;
+      line-height: 50px;
+      border-radius: 50%; /* cirkel achtergrond */
+      background-color: #d1c2c2;
+      box-shadow: 0 0 4px rgba(0,0,0,0.3);
     }
   </style>
 </head>

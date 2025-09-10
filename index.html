@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>R1 Popcat Plugin</title>
+  <meta name="viewport" content="width=240, height=282, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 240px;
+      height: 282px;
+      background: #222;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      font-family: sans-serif;
+      color: #fff;
+    }
+    #app {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #popcat {
+      width: 200px;
+      height: auto;
+      cursor: pointer;
+    }
+    #counter {
+      margin-top: 8px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <img id="popcat" src="popclose.png" alt="Popcat">
+    <div id="counter">0</div>
+    <audio id="popSound" src="pop.mp3" preload="auto"></audio>
+  </div>
+
+  <script>
+    let count = 0;
+    let isOpen = false;
+    const popcat = document.getElementById("popcat");
+    const counter = document.getElementById("counter");
+    const popSound = document.getElementById("popSound");
+
+    function doPop() {
+      count++;
+      counter.textContent = count;
+      popcat.src = isOpen ? "popclose.png" : "popopen.png";
+      isOpen = !isOpen;
+      popSound.currentTime = 0;
+      popSound.play();
+    }
+
+    // Klik op het plaatje
+    popcat.addEventListener("click", doPop);
+
+    // PTT knop op de R1
+    window.addEventListener("sideClick", doPop);
+
+    // Voor PC test: druk Enter
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") doPop();
+    });
+  </script>
+</body>
+</html>

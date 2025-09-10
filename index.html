@@ -10,22 +10,22 @@
       padding: 0;
       width: 240px;
       height: 282px;
-      background-color: #f0dbdb !important; /* geforceerde kleur */
-      display: flex;
-      justify-content: center;
-      align-items: center;
       overflow: hidden;
       font-family: sans-serif;
+      background: black; /* fallback zwart */
     }
     #app {
+      width: 240px;
+      height: 282px;
+      background-color: #f0dbdb; /* geforceerde achtergrond op div */
       display: flex;
       flex-direction: column;
+      justify-content: flex-end; /* naar beneden */
       align-items: center;
-      justify-content: center;
-      height: 100%;
+      padding-bottom: 30px; /* extra ruimte van onder */
     }
     #popcat {
-      width: 130px;   /* iets kleiner */
+      width: 130px;
       height: auto;
       cursor: pointer;
       outline: none;
@@ -35,7 +35,7 @@
       margin-top: 12px;
       font-size: 18px;
       font-weight: bold;
-      color: brown; /* teller kleur */
+      color: brown;
     }
   </style>
 </head>

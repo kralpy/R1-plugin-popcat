@@ -15,13 +15,13 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: transparent; /* voor afronden zichtbaar */
+      background: transparent;
     }
     #app {
       width: 240px;
       height: 282px;
       background-color: #f0dbdb;
-      border-radius: 20px; /* afgeronde hoeken */
+      border-radius: 20px;
       display: flex;
       flex-direction: column;
       justify-content: flex-end; 
@@ -56,7 +56,6 @@
         background-color: #d1c2c2;
         box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
     }
-
   </style>
 </head>
 <body>
@@ -71,35 +70,56 @@
     const popcat = document.getElementById("popcat");
     const counter = document.getElementById("counter");
 
-   function playPopSound() {
-    const context = new (window.AudioContext || window.webkitAudioContext)();
-    const oscillator = context.createOscillator();
-    const gainNode = context.createGain();
-    oscillator.type = 'triangle';
-    oscillator.frequency.setValueAtTime(1000, context.currentTime);
-    gainNode.gain.setValueAtTime(0.1, context.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.00001, context.currentTime + 0.02);
-    oscillator.connect(gainNode);
-    gainNode.connect(context.destination);
-    oscillator.start();
-    oscillator.stop(context.currentTime + 0.02);
-}
+    // Load saved counter
+    async function loadCounter() {
+        if(window.creationStorage && window.creationStorage.plain){
+            const saved = await window.creationStorage.plain.getItem('popcat_count');
+            if (saved) {
+                count = parseInt(atob(saved)) || 0;
+                counter.textContent = count;
+            }
+        }
+    }
 
+    // Save counter
+    async function saveCounter() {
+        if(window.creationStorage && window.creationStorage.plain){
+            await window.creationStorage.plain.setItem('popcat_count', btoa(count));
+        }
+    }
 
-    function doPop() {
-      count++;
-      counter.textContent = count;
-      popcat.src = isOpen ? "popclose.png" : "popopen.png";
-      isOpen = !isOpen;
-      playPopSound();
+    function playPopSound() {
+        const context = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = context.createOscillator();
+        const gainNode = context.createGain();
+        oscillator.type = 'triangle';
+        oscillator.frequency.setValueAtTime(1000, context.currentTime);
+        gainNode.gain.setValueAtTime(0.1, context.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.00001, context.currentTime + 0.02);
+        oscillator.connect(gainNode);
+        gainNode.connect(context.destination);
+        oscillator.start();
+        oscillator.stop(context.currentTime + 0.02);
+    }
+
+    async function doPop() {
+        count++;
+        counter.textContent = count;
+        popcat.src = isOpen ? "popclose.png" : "popopen.png";
+        isOpen = !isOpen;
+        playPopSound();
+        await saveCounter();
     }
 
     popcat.addEventListener("click", doPop);
     window.addEventListener("sideClick", doPop);
 
     document.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") doPop();
+        if (e.key === "Enter") doPop();
     });
+
+    // Initialize
+    loadCounter();
   </script>
 </body>
 </html>

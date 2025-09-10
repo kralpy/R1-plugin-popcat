@@ -39,7 +39,6 @@
   <div id="app">
     <img id="popcat" src="popclose.png" alt="Popcat">
     <div id="counter">0</div>
-    <audio id="popSound" src="pop.mp3" preload="auto"></audio>
   </div>
 
   <script>
@@ -47,15 +46,33 @@
     let isOpen = false;
     const popcat = document.getElementById("popcat");
     const counter = document.getElementById("counter");
-    const popSound = document.getElementById("popSound");
+
+    // Pop geluid via Web Audio API
+    function playPopSound() {
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+
+      osc.type = "square"; // scherpe toon
+      osc.frequency.setValueAtTime(800, audioCtx.currentTime); // startfrequentie
+      osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.1);
+
+      gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+
+      osc.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.1);
+    }
 
     function doPop() {
       count++;
       counter.textContent = count;
       popcat.src = isOpen ? "popclose.png" : "popopen.png";
       isOpen = !isOpen;
-      popSound.currentTime = 0;
-      popSound.play();
+      playPopSound();
     }
 
     // Klik op het plaatje

@@ -22,7 +22,7 @@
       flex-direction: column;
       justify-content: flex-end; /* kat + teller naar beneden */
       align-items: center;
-      padding-bottom: 30px;
+      padding-bottom: 25px; /* iets hoger kat plaatsen */
       position: relative;
     }
     #popcat {
@@ -32,15 +32,18 @@
       outline: none;
       user-select: none;
       position: relative;
+      top: -10px; /* kat iets omhoog */
       z-index: 1;
     }
     #counter {
       position: absolute; /* vast op zijn plek */
-      top: 10px; /* bovenaan het scherm */
+      top: 20px; /* teller iets naar beneden */
       font-size: 18px;
       font-weight: bold;
       color: brown;
       z-index: 2;
+      text-align: center;
+      width: 100%;
     }
   </style>
 </head>
@@ -77,7 +80,7 @@
 
     function doPop() {
       count++;
-      counter.textContent = count; // teller blijft op zijn plek
+      counter.textContent = count;
       popcat.src = isOpen ? "popclose.png" : "popopen.png";
       isOpen = !isOpen;
       playPopSound();

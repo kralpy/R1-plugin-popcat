@@ -24,9 +24,11 @@
       align-items: center;
     }
     #popcat {
-      width: 160px;   /* kleiner */
+      width: 140px;   /* nog kleiner */
       height: auto;
       cursor: pointer;
+      outline: none;  /* geen selectie rand */
+      user-select: none; /* geen highlight bij click */
     }
     #counter {
       margin-top: 8px;
@@ -37,7 +39,7 @@
 </head>
 <body>
   <div id="app">
-    <img id="popcat" src="popclose.png" alt="Popcat">
+    <img id="popcat" src="popclose.png" alt="Popcat" tabindex="-1">
     <div id="counter">0</div>
   </div>
 
@@ -47,24 +49,26 @@
     const popcat = document.getElementById("popcat");
     const counter = document.getElementById("counter");
 
-    // Betere pop sound (lage plop toon)
+    // Realistischer "pop" geluid (fles effect)
     function playPopSound() {
-      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      const osc = audioCtx.createOscillator();
-      const gainNode = audioCtx.createGain();
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
 
-      osc.type = "sine"; // zachte pop toon
-      osc.frequency.setValueAtTime(200, audioCtx.currentTime); // lage frequentie
-      osc.frequency.exponentialRampToValueAtTime(50, audioCtx.currentTime + 0.08);
+      // Ruis burst
+      const bufferSize = ctx.sampleRate * 0.2; // 0.2 sec
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = (Math.random() * 2 - 1) * Math.exp(-i / 400); // snel wegstervend
+      }
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
 
-      gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+      const gainNode = ctx.createGain();
+      gainNode.gain.setValueAtTime(0.7, ctx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
 
-      osc.connect(gainNode);
-      gainNode.connect(audioCtx.destination);
-
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.08);
+      noise.connect(gainNode).connect(ctx.destination);
+      noise.start();
     }
 
     function doPop() {
@@ -75,17 +79,12 @@
       playPopSound();
     }
 
-    // Klik op het plaatje
     popcat.addEventListener("click", doPop);
-
-    // PTT knop op de R1
     window.addEventListener("sideClick", doPop);
 
-    // Voor PC test: Enter toets
     document.addEventListener("keydown", (e) => {
       if (e.key === "Enter") doPop();
     });
   </script>
 </body>
 </html>
-

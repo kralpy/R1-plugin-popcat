@@ -71,25 +71,20 @@
     const popcat = document.getElementById("popcat");
     const counter = document.getElementById("counter");
 
-    function playPopSound() {
-      const ctx = new (window.AudioContext || window.webkitAudioContext)();
-      const duration = 0.2;
-      const osc = ctx.createOscillator();
-      const gainNode = ctx.createGain();
-    
-      osc.type = 'triangle';           // realistischer popgeluid
-      osc.frequency.setValueAtTime(600, ctx.currentTime);
-      gainNode.gain.setValueAtTime(0.5, ctx.currentTime);
-    
-      osc.connect(gainNode).connect(ctx.destination);
-      osc.start();
-    
-      // snelle daling voor “pop” effect
-      gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration);
-      osc.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + duration);
-    
-      osc.stop(ctx.currentTime + duration);
-    }
+   function playPopSound() {
+    const context = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = context.createOscillator();
+    const gainNode = context.createGain();
+    oscillator.type = 'triangle';
+    oscillator.frequency.setValueAtTime(1000, context.currentTime);
+    gainNode.gain.setValueAtTime(0.1, context.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.00001, context.currentTime + 0.02);
+    oscillator.connect(gainNode);
+    gainNode.connect(context.destination);
+    oscillator.start();
+    oscillator.stop(context.currentTime + 0.02);
+}
+
 
     function doPop() {
       count++;
